@@ -18,7 +18,12 @@ class MllFormat:
             content = self.remove_comments(content)
             sections = self.split_content_list(content)
             sections = self.remove_useless_sections(sections)
-            sections
+            for section in sections:
+                # enlever tous les espaces et les newlines
+                section = self.trim(section)
+
+                section = self.remove_header(section)
+                section
 
     # La conversion de MIDI en MML utilisée est le logiciel 3MLE.
     # Pendant la conversion, 3MLE ajoute des commentaires pour mieux organiser le fichier.
@@ -51,6 +56,14 @@ class MllFormat:
             valid_sections.append(section)
 
         return valid_sections
+
+    def trim(self, section):
+        section = section.replace("\n", "")
+        section = section.replace(" ", "")
+        return section
+
+    def remove_header(self, section):
+        return re.sub(re.compile(r'\[.*\]'), "", section)
 
 
 if __name__ == '__main__':
