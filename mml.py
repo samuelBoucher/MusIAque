@@ -11,35 +11,41 @@ class MllFormat:
 
     def format_mml(self):
         mml_content_list = []
+        data = ""
         for filename in os.listdir(self.path):
             mml_content_list.append(open(self.path + filename).read())
 
-        for content in mml_content_list:
-            content = self.remove_comments(content)
-            sections = self.split_content_list(content)
+        for song in mml_content_list:
+            formatted_song = ""
+            song = self.remove_comments(song)
+            sections = self.split_content_list(song)
             sections = self.remove_useless_sections(sections)
             for section in sections:
-                # enlever tous les espaces et les newlines
-                section = self.trim(section)
-
+                section = self.trim(section)  # enlever tous les espaces et les newlines
                 section = self.remove_header(section)
-                section
+                formatted_song += section
+                formatted_song += '\n'  # on met une section par ligne
+
+            data += formatted_song
+            data += "\n"  # On sépare chaque chanson par une ligne vide
+
+        return data
 
     # La conversion de MIDI en MML utilisée est le logiciel 3MLE.
     # Pendant la conversion, 3MLE ajoute des commentaires pour mieux organiser le fichier.
     # Nous n'en avons pas besoin: nous avons seulement besoin des "notes de musique".
-    def remove_comments(self, content):
-        content = re.sub(re.compile("/\*.*?\*/"), "",
-                         content)  # Enlever tous les commentaires /* ... */
-        content = re.sub(re.compile("//.*?\n"), "",
-                         content)  # Enlever tous les commentaires // ...
-        return content
+    def remove_comments(self, song):
+        song = re.sub(re.compile("/\*.*?\*/"), "",
+                      song)  # Enlever tous les commentaires /* ... */
+        song = re.sub(re.compile("//.*?\n"), "",
+                      song)  # Enlever tous les commentaires // ...
+        return song
 
     # Chaque section est délimitée par un en-tête entre brackets (exemple: [entete].
     # Donc, on fait un split sur le symbole '['.
-    def split_content_list(self, content):
+    def split_content_list(self, song):
         delimiter = "["
-        return [delimiter+section for section in content.split(delimiter) if section]
+        return [delimiter + section for section in song.split(delimiter) if section]
 
     def remove_useless_sections(self, sections):
         valid_sections = []
@@ -68,4 +74,5 @@ class MllFormat:
 
 if __name__ == '__main__':
     mml_format = MllFormat()
-    mml_format.format_mml()
+    data = mml_format.format_mml()
+    data
