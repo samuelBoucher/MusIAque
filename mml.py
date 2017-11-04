@@ -2,11 +2,12 @@ import os
 import re
 
 
-class MllFormat:
+class MmlToNeuralNetwork:
     path = "Data\\"
-    useless_section_header = [
+    useless_section_string = [
         "[Settings]",
-        "[3MLE EXTENSION]"
+        "[3MLEEXTENSION]",
+        "r1r1r1r1r1r1r1r1r1r1"
     ]
 
     def format_mml(self):
@@ -19,9 +20,10 @@ class MllFormat:
             formatted_song = ""
             song = self.remove_comments(song)
             sections = self.split_content_list(song)
-            sections = self.remove_useless_sections(sections)
             for section in sections:
                 section = self.trim(section)  # enlever tous les espaces et les newlines
+                if not self.is_useful(section):
+                    continue
                 section = self.remove_header(section)
                 formatted_song += section
                 formatted_song += '\n'  # on met une section par ligne
@@ -47,21 +49,11 @@ class MllFormat:
         delimiter = "["
         return [delimiter + section for section in song.split(delimiter) if section]
 
-    def remove_useless_sections(self, sections):
-        valid_sections = []
-        for section in sections:
-            useless_header = False
-
-            for header in self.useless_section_header:
-                if section.startswith(header):
-                    useless_header = True
-
-            if useless_header:
-                continue
-
-            valid_sections.append(section)
-
-        return valid_sections
+    def is_useful(self, section):
+        for string in self.useless_section_string:
+            if string in section:
+                return False
+        return True
 
     def trim(self, section):
         section = section.replace("\n", "")
@@ -73,6 +65,6 @@ class MllFormat:
 
 
 if __name__ == '__main__':
-    mml_format = MllFormat()
+    mml_format = MmlToNeuralNetwork()
     data = mml_format.format_mml()
     data
