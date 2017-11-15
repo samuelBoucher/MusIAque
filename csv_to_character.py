@@ -1,23 +1,7 @@
-# pour transformer des nombres en ascii: chr(nombre)
-# inverse: ord(caractere)
-
-# ascii: enlever les caracteres 0 a 32 pcq impossible a ecrire dans txt
-
-# importer csv
-# separer en lignes
-
-# trouver time signature
-
-# prendre note_on -> tableau
-# prendre note_off -> tableau
-
-# pour chaque time clock (voir combien dans time signature):
-# pour chaque note_on:
-# print la note
-# si note encore presente sans note off au prochain time clock:
-# print _ (pour la liaison)
 import csv
+import sys
 from operator import itemgetter
+
 
 class MusiaqueCsv:
     note_labels = [
@@ -29,8 +13,8 @@ class MusiaqueCsv:
         with open(file, newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
             rows = self.get_rows(spamreader)
-            time_separation = int(self.get_time_separation(rows))
             notes_array = self.get_notes_array(rows)
+            time_separation = int(self.get_time_separation(notes_array))
             characters = self.convert_notes_to_characters(notes_array, time_separation)
             print(characters)
 
@@ -42,16 +26,27 @@ class MusiaqueCsv:
         return rows
 
     # exemple de ligne Time_signature en csv
-    # L'unité de temps est au dernier item du tableau
+    # L'unité de temps la plus petite est au dernier item du tableau
     # ['1,', '0,', 'Time_signature,', '4,', '2,', '24,', '8']
-    def get_time_separation(self, rows):
-        time_signature_row = []
-        for row in rows:
-            if "Time_signature," in row:
-                time_signature_row = row
+    def get_time_separation(self, notes_array):
+        # plus petite difference entre les time clocks
+        smaller_time_separation = sys.maxsize
+        for i in range(len(notes_array)):
+            current_time_clock = notes_array[i][1]
+
+            try:
+                next_time_clock = notes_array[i+1][1]
+            except IndexError:
                 break
 
-        return time_signature_row[6]
+            time_separation = next_time_clock - current_time_clock
+            if time_separation == 0:
+                continue
+            if time_separation < smaller_time_separation:
+                smaller_time_separation = time_separation
+
+        print(smaller_time_separation)
+        return smaller_time_separation
 
     def get_notes_array(self, rows):
         notes_array = []
@@ -80,10 +75,8 @@ class MusiaqueCsv:
             for note in notes_to_be_played:
                 if note[1] > time_clock:
                     break
-
                 if note[1] == time_clock:
                     if note[2] == "Note_on_c,":
-                        # notes_to_be_played.remove(note)
                         notes_playing.append(note)
                     elif note[2] == "Note_off_c,":
                         for note_playing in notes_playing:
@@ -107,6 +100,6 @@ class MusiaqueCsv:
 
 
 if __name__ == '__main__':
-    MusiaqueCsv('memestar.csv')
+    MusiaqueCsv('Data\988-v02.csv')
 
 
