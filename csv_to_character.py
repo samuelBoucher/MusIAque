@@ -3,7 +3,7 @@ import sys
 from operator import itemgetter
 
 
-class MusiaqueCsv:
+class CsvToCharacter:
     note_labels = [
         "Note_on_c,",
         "Note_off_c,"
@@ -16,6 +16,7 @@ class MusiaqueCsv:
             notes_array = self.get_notes_array(rows)
             time_separation = int(self.get_time_separation(notes_array))
             characters = self.convert_notes_to_characters(notes_array, time_separation)
+            # characters = self.convert_notes_to_characters(notes_array, 12)
             print(characters)
 
     def get_rows(self, spamreader):
@@ -25,9 +26,6 @@ class MusiaqueCsv:
 
         return rows
 
-    # exemple de ligne Time_signature en csv
-    # L'unité de temps la plus petite est au dernier item du tableau
-    # ['1,', '0,', 'Time_signature,', '4,', '2,', '24,', '8']
     def get_time_separation(self, notes_array):
         # plus petite difference entre les time clocks
         smaller_time_separation = sys.maxsize
@@ -45,7 +43,6 @@ class MusiaqueCsv:
             if time_separation < smaller_time_separation:
                 smaller_time_separation = time_separation
 
-        print(smaller_time_separation)
         return smaller_time_separation
 
     def get_notes_array(self, rows):
@@ -100,6 +97,6 @@ class MusiaqueCsv:
 
 
 if __name__ == '__main__':
-    MusiaqueCsv('Data\988-v02.csv')
+    CsvToCharacter('memestar.csv')
 
 
