@@ -84,7 +84,7 @@ class CsvToCharacter:
             for note in notes_playing:
                 for note_removed in notes_removed:
                     if self.notes_are_equal(note, note_removed):
-                        characters += 'é'
+                        characters += '~'
                 characters += chr(int(note[4][:-1]))
 
             characters += " "
