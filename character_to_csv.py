@@ -61,26 +61,36 @@ class CharacterToCsv:
             if note == '~':
                 repeated_note = True
             elif note == ' ':
-                # 0 -> 123
-                # 1 -> 23
-                # 2 -> 3
-                for track in tracks:
-                    if len(track) < time_clocks:
-                        track.append(" ")
+                self.fill_tracks_blanks(time_clocks, tracks)
                 channel_counter = 0
                 time_clocks += 1
             else:
                 if repeated_note:
-                    tracks[channel_counter].append('~' + note)
-                    repeated_note = False
+                    i = channel_counter
+                    while i < nb_tracks:
+                        channel_without_spaces = [x for x in tracks[i] if x != " "]
+                        channel_note = channel_without_spaces[-1]
+                        if channel_note == note:
+                            tracks[i].append('~' + note)
+                            repeated_note = False
+                            break
+                        else:
+                            i += 1
                 else:
                     tracks[channel_counter].append(note)
 
                 channel_counter += 1
+
+        self.fill_tracks_blanks(time_clocks, tracks)
         for track in tracks:
             print(len(track))
             print(track)
         return tracks
+
+    def fill_tracks_blanks(self, time_clocks, tracks):
+        for track in tracks:
+            if len(track) < time_clocks:
+                track.append(" ")
 
 
 if __name__ == '__main__':
