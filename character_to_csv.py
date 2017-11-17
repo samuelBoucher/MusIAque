@@ -4,59 +4,60 @@ import sys
 
 
 class CharacterToCsv:
-    time_clock_interval = 48
+    time_clock_interval = 12
 
     def __init__(self, text_file):
         with open(text_file) as text:
             content = text.read()
 
-        rows = self.get_csv_content(content)
-        with open("csv\\memestar_generated.csv") as csv_file:
-            wr = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+        rows = self.get_csv_content(content).split('\n')
+        print(rows)
+        with open("csv\\memestar_generated.csv", 'w') as csv_file:
+            for row in rows:
+                csv_file.write(row)
+                csv_file.write('\n')
 
     def get_csv_content(self, content):
-        rows = []
+        rows = ""
         nb_tracks = self.get_nb_tracks(content)
-        self.append_header(nb_tracks, rows)
-        self.append_settings_track(rows)
-        self.append_notes_tracks(content, nb_tracks, rows)
+        rows += self.generate_header(nb_tracks)
+        rows += self.generate_settings_track()
+        rows += self.generate_notes_tracks(content, nb_tracks)
+        rows += self.append_end_file()
+        return rows
 
     def append_header(self, nb_tracks, rows):
-        header = self.generate_header(nb_tracks)
-        rows.append(header)
+        rows += self.generate_header(nb_tracks)
+
+    def generate_header(self, nb_tracks):
+        return "0, 0, Header, 1, " + str(nb_tracks) + ", 96 \n"
 
     def append_settings_track(self, rows):
-        settings_tracks = self.generate_settings_track()
-        for setting_row in settings_tracks:
-            rows.append(setting_row)
+        rows += self.generate_settings_track()
 
     def get_nb_tracks(self, content):
         content_without_repetition = content.replace('~', '')
         chords = content_without_repetition.split(" ")
-        nb_tracks = len(max(chords, key=len))
+        # + 1 pour inclure la track des settings
+        nb_tracks = len(max(chords, key=len)) + 1
         return nb_tracks
 
-    def generate_header(self, nb_tracks):
-        return ['0,', '0,', 'Header,', '1,', str(nb_tracks) + ',', '96']
-
     def generate_settings_track(self):
-        return [
-            ['1,', '0,', 'Start_track'],
-            ['1,', '0,', 'Time_signature,', '4,', '2,', '24,', '8'],
-            ['1,', '0,', 'Tempo,', '500000'],
-            ['1,', '0,', 'Program_c,', '1,', '6'],
-            ['1,', '0,', 'End_track']
-        ]
+        return "1, 0, Start_track \n" \
+               "1, 0, Time_signature, 4, 2, 24, 8 \n" \
+               "1, 0, Tempo, 500000 \n" \
+               "1, 0, Program_c, 1, 6 \n" \
+               "1, 0, End_track \n"
 
-    def append_notes_tracks(self, content, nb_tracks, rows):
+    def generate_notes_tracks(self, content, nb_tracks):
         character_tracks = self.get_character_tracks(content, nb_tracks)
+        csv_note_tracks = ""
         for i in range(nb_tracks):
             channel_index = i + 2
-            self.append_note_channel(channel_index, character_tracks[i], rows)
+            csv_note_tracks += self.append_note_channel(channel_index, character_tracks[i])
 
-        # for character_track in character_tracks:
-        #    self.append_note_channel(character_track, rows)
-        
+        return csv_note_tracks
+
     def get_character_tracks(self, content, nb_tracks):
         print(content)
         tracks = []
@@ -109,47 +110,50 @@ class CharacterToCsv:
             if len(track) < time_clocks:
                 track.append(" ")
 
-    def append_note_channel(self, channel_index, character_track, rows):
-        csv_track = self.convert_track_to_csv(channel_index, character_track)
+    def append_note_channel(self, channel_index, character_track):
+        return self.convert_track_to_csv(channel_index, character_track)
 
     def convert_track_to_csv(self, channel_index, character_track):
-        csv_track = []
+        csv_track = ""
 
-        csv_track.append([str(channel_index) + ',', '0,', 'Start_track'])
+        csv_track += str(channel_index) + ", 0, Start_track \n"
 
         time_clock = 0
         previous_character = ""
         for character in character_track:
-            if character == " ":
-                continue
-            if '~' in character:
-                csv_track.append(self.generate_note_off_row(channel_index, previous_character, time_clock))
-                csv_track.append(self.generate_note_on_row(channel_index, character, time_clock))
-            if character != previous_character:
-                if previous_character != "":
-                    csv_track.append(self.generate_note_off_row(channel_index, previous_character, time_clock))
+            if character != " ":
+                if '~' in character:
+                    character = character.replace('~', '')
+                    csv_track += self.generate_note_off_row(channel_index, previous_character, time_clock)
+                    csv_track += self.generate_note_on_row(channel_index, character, time_clock)
+                if character != previous_character:
+                    if previous_character != "":
+                        csv_track += self.generate_note_off_row(channel_index, previous_character, time_clock)
 
-                csv_track.append(self.generate_note_on_row(channel_index, character, time_clock))
+                csv_track += self.generate_note_on_row(channel_index, character, time_clock)
 
             previous_character = character
             time_clock += self.time_clock_interval
 
-        csv_track.append([str(channel_index) + ',', '0,', 'End_track'])
+        csv_track += str(channel_index) + "," + str(time_clock) + ", End_track \n"
         print(csv_track)
-        
+        return csv_track
 
     def generate_note_on_row(self, channel_index, character, time_clock):
         note_in_decimal = str(ord(character))
         track_index = channel_index - 2
-        return [str(channel_index) + ',', str(time_clock) + ',', 'Note_on_c,', str(track_index) + ',',
-                str(note_in_decimal) + ',', '100']
+        return str(channel_index) + ", " + str(time_clock) + ", Note_on_c, " + str(track_index) + ", " + \
+               str(note_in_decimal) + ", 100 \n"
 
     def generate_note_off_row(self, channel_index, character, time_clock):
         note_in_decimal = str(ord(character))
         track_index = channel_index - 2
-        return [str(channel_index) + ',', str(time_clock) + ',', 'Note_off_c,', str(track_index) + ',',
-                str(note_in_decimal) + ',', '100']
+        return str(channel_index) + ", " + str(time_clock) + ", Note_off_c, " + str(track_index) + ", " + \
+               str(note_in_decimal) + ", 100 \n"
+
+    def append_end_file(self):
+        return "0, 0, End_of_file \n"
 
 
 if __name__ == '__main__':
-    CharacterToCsv("txt\\test.txt")
+    CharacterToCsv("txt\\swag.txt")
