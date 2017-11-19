@@ -4,7 +4,7 @@ import sys
 
 
 class CharacterToCsv:
-    time_clock_interval = 12
+    time_clock_interval = 48
 
     def __init__(self, text_file):
         with open(text_file) as text:
@@ -156,4 +156,4 @@ class CharacterToCsv:
 
 
 if __name__ == '__main__':
-    CharacterToCsv("txt\\swag.txt")
+    CharacterToCsv("txt\\test.txt")

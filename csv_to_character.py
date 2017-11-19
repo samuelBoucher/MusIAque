@@ -2,6 +2,10 @@ import csv
 import sys
 from operator import itemgetter
 
+# csv reader transforme chaque entree en tableau.
+# un tableau de note ressemble a ceci:
+    
+
 
 class CsvToCharacter:
     note_labels = [
@@ -9,15 +13,16 @@ class CsvToCharacter:
         "Note_off_c,"
     ]
 
+    characters = ""
+
     def __init__(self, file):
         with open(file, newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
             rows = self.get_rows(spamreader)
             notes_array = self.get_notes_array(rows)
             time_separation = int(self.get_time_separation(notes_array))
-            characters = self.convert_notes_to_characters(notes_array, time_separation)
-            # characters = self.convert_notes_to_characters(notes_array, 12)
-            print(characters)
+            self.convert_notes_to_characters(notes_array, time_separation)
+            print(self.characters)
 
     def get_rows(self, spamreader):
         rows = []
@@ -64,7 +69,6 @@ class CsvToCharacter:
         notes_to_be_played = notes_array
         first_clock = notes_to_be_played[0][1]
         last_clock = notes_to_be_played[-1][1]
-        characters = ""
         time_clock = first_clock
         notes_playing = []
         while time_clock <= last_clock:
@@ -84,19 +88,28 @@ class CsvToCharacter:
             for note in notes_playing:
                 for note_removed in notes_removed:
                     if self.notes_are_equal(note, note_removed):
-                        characters += '~'
-                characters += chr(int(note[4][:-1]))
+                        self.characters += '~'
+                self.add_character(note)
 
-            characters += " "
+            self.characters += " "
             time_clock += time_separation
-
-        return characters
 
     def notes_are_equal(self, note1, note2):
         return note1[3] == note2[3] and note1[4] == note2[4]
 
+    def add_character(self, note):
+        character = self.get_character(int(note[4][:-1]))
+        if character is not None:
+            self.characters += character
+
+    def get_character(self, note):
+        if note in range(0, 32) or note in range(126, 127):
+            return
+        return chr(note)
+
+
 
 if __name__ == '__main__':
-    CsvToCharacter('memestar.csv')
+    CsvToCharacter('Data\\jsbwv549.csv')
 
 
