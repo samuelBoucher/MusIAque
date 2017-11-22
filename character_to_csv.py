@@ -66,42 +66,21 @@ class CharacterToCsv:
         channel_counter = 0
 
         repeated_note = False
-        # note repetee pendant la duree du time_clock
-        repeated_note_in_time_clock = False
 
         time_clocks = 1
         for note in content:
             if note == '~':
                 repeated_note = True
-                repeated_note_in_time_clock = True
+                continue
             elif note == ' ':
                 self.fill_tracks_blanks(time_clocks, tracks)
                 channel_counter = 0
                 time_clocks += 1
-                repeated_note_in_time_clock = False
             else:
-                # if repeated_note:
-                #     i = channel_counter
-                #     while i < nb_tracks:
-                #         channel_without_spaces = [x for x in tracks[i] if x != " "]
-                #         # si la track est vide, on l'ignore
-                #         if not channel_without_spaces:
-                #             continue
-                #         channel_note = channel_without_spaces[-1]
-                #         if channel_note == note:
-                #             tracks[i].append('~' + note)
-                #             i = sys.maxsize
-                #         else:
-                #             i += 1
-                #     repeated_note = False
-                # else:
-                #     if repeated_note_in_time_clock:
-                #         for track in tracks:
-                #             if len(track) < time_clocks:
-                #                 track.append(note)
-                #                 break
-                #     else:
-                tracks[channel_counter].append(note)
+                if repeated_note:
+                    tracks[channel_counter].append('~' + note)
+                else:
+                    tracks[channel_counter].append(note)
 
                 channel_counter += 1
 
@@ -158,4 +137,4 @@ class CharacterToCsv:
 
 
 if __name__ == '__main__':
-    CharacterToCsv("txt\\ohno.txt")
+    CharacterToCsv("txt\\test.txt")

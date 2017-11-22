@@ -1,0 +1,19 @@
+0, 0, Header, 1, 2, 96 
+1, 0, Start_track 
+1, 0, Time_signature, 4, 2, 24, 8 
+1, 0, Tempo, 500000 
+1, 0, Program_c, 1, 6 
+1, 0, End_track 
+2, 0, Start_track 
+2, 0, Note_on_c, 0, 71, 100 
+2, 48, Note_off_c, 0, 71, 100 
+2, 48, Note_on_c, 0, 71, 100 
+2, 96, Note_off_c, 0, 71, 100 
+2, 96, Note_on_c, 0, 71, 100 
+2, 144, Note_off_c, 0, 71, 100 
+2, 144, Note_on_c, 0, 71, 100 
+2,192, End_track 
+3, 0, Start_track 
+3,192, End_track 
+0, 0, End_of_file 
+
