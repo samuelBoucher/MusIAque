@@ -80,25 +80,28 @@ class CharacterToCsv:
                 time_clocks += 1
                 repeated_note_in_time_clock = False
             else:
-                if repeated_note:
-                    i = channel_counter
-                    while i < nb_tracks:
-                        channel_without_spaces = [x for x in tracks[i] if x != " "]
-                        channel_note = channel_without_spaces[-1]
-                        if channel_note == note:
-                            tracks[i].append('~' + note)
-                            i = sys.maxsize
-                        else:
-                            i += 1
-                    repeated_note = False
-                else:
-                    if repeated_note_in_time_clock:
-                        for track in tracks:
-                            if len(track) < time_clocks:
-                                track.append(note)
-                                break
-                    else:
-                        tracks[channel_counter].append(note)
+                # if repeated_note:
+                #     i = channel_counter
+                #     while i < nb_tracks:
+                #         channel_without_spaces = [x for x in tracks[i] if x != " "]
+                #         # si la track est vide, on l'ignore
+                #         if not channel_without_spaces:
+                #             continue
+                #         channel_note = channel_without_spaces[-1]
+                #         if channel_note == note:
+                #             tracks[i].append('~' + note)
+                #             i = sys.maxsize
+                #         else:
+                #             i += 1
+                #     repeated_note = False
+                # else:
+                #     if repeated_note_in_time_clock:
+                #         for track in tracks:
+                #             if len(track) < time_clocks:
+                #                 track.append(note)
+                #                 break
+                #     else:
+                tracks[channel_counter].append(note)
 
                 channel_counter += 1
 
@@ -129,8 +132,7 @@ class CharacterToCsv:
                 if character != previous_character:
                     if previous_character != "":
                         csv_track += self.generate_note_off_row(channel_index, previous_character, time_clock)
-
-                csv_track += self.generate_note_on_row(channel_index, character, time_clock)
+                    csv_track += self.generate_note_on_row(channel_index, character, time_clock)
 
             previous_character = character
             time_clock += self.time_clock_interval
@@ -156,4 +158,4 @@ class CharacterToCsv:
 
 
 if __name__ == '__main__':
-    CharacterToCsv("txt\\test.txt")
+    CharacterToCsv("txt\\ohno.txt")

@@ -4,7 +4,13 @@ from operator import itemgetter
 
 # csv reader transforme chaque entree en tableau.
 # un tableau de note ressemble a ceci:
-    
+# 0: channel
+# 1: time clock
+# 2: note_on / note_off
+# 3: track
+# 4: note en décimal
+# 5: vélocité (volume)
+# donc, quand il est écrit "notes_array[i][1], on va chercher le time clock de la note à l'index i.
 
 
 class CsvToCharacter:
@@ -110,6 +116,6 @@ class CsvToCharacter:
 
 
 if __name__ == '__main__':
-    CsvToCharacter('Data\\jsbwv549.csv')
+    CsvToCharacter('memestar.csv')
 
 
