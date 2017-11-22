@@ -83,6 +83,7 @@ class CharacterToCsv:
                     tracks[channel_counter].append(note)
 
                 channel_counter += 1
+                repeated_note = False
 
         self.fill_tracks_blanks(time_clocks, tracks)
         return tracks
@@ -137,4 +138,4 @@ class CharacterToCsv:
 
 
 if __name__ == '__main__':
-    CharacterToCsv("txt\\test.txt")
+    CharacterToCsv("txt\\ohno.txt")
