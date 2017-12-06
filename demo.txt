@@ -1,0 +1,4 @@
+Avoir ouvert:
+	Le projet (explorateur)
+	Pycharm
+	synthesia

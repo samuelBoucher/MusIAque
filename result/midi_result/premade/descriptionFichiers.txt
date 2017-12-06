@@ -1,0 +1,12 @@
+test1: 
+	premier fichier généré. (lundi 20 novembre)
+	Toutes les notes sont répétées parce que la conversion d'ASCII à CSV ne se faisait pas encore correctement.
+
+test2:
+	Fichier généré après 10 heures d'entraînement.
+
+test3: 
+	Fichier généré après aucun entraînement. Il y a un segment avec 221 notes en même temps...
+
+test4: 
+	Fichier généré après 20 minutes d'entraînement.

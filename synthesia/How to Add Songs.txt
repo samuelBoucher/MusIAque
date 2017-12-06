@@ -1,0 +1,39 @@
+
+Initial Setup
+-------------
+
+If you downloaded the stand-alone zip package for Windows or are on a Mac, you
+need to set up the song library for the first time:
+
+1. If you didn't extract the "music" folder from the package you downloaded,
+   put it someplace convenient like the Music folder in your Documents or
+   profile directory.
+
+2. Start Synthesia.
+
+3. From the title screen, click Play to open the song library.
+
+4. Click "Managed Watched Folders".
+
+5. Click "Add New Watched Folder".
+
+6. Navigate to the location you extracted the music folder from the Synthesia
+   package.
+
+7. Double-click the "music" folder.
+
+8. Click "Watch this folder and all sub-folders".
+
+That should be it. Tap escape a couple times to get back to the song
+library. There should now be over a hundred songs in there.
+
+
+Adding New Songs
+----------------
+
+From now on, whenever you download a MIDI file from the Internet, you can just
+drop it in the same music folder wherever you extracted it, and it will show
+up in the song library the next time you run Synthesia.
+
+(If you used the Windows installer, there will be a "Synthesia Music" folder
+inside your Documents folder.)

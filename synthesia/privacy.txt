@@ -1,0 +1,30 @@
+Synthesia Privacy Policy
+by Nicholas Piegdon
+
+Last Modified July-12-2010
+
+
+Privacy
+
+The Synthesia website and the Synthesia application limit the collection of personally identifiable user data to purposes including but not limited to the following:
+1. To enhance your experience.  Statistical information may be used in a variety of ways to improve the website or the game.
+2. To solve technical problems.  Log data may be examined in the course of solving technical problems and in tracking down badly-behaved code or interactions.
+3. To monitor website conditions.  I statistically sample raw log data from users' visits and activity to help maintain functionality of the website and related services.
+
+
+Release of Personally Identifiable Information
+
+It is my policy that personally identifiable data collected in the server logs, or through records in the database, or through other non-publicly-available methods, may be released in any of the following situations:
+
+1. In response to a valid subpoena or other compulsory request from law enforcement,
+2. With permission of the affected user,
+3. When necessary for investigation of abuse complaints,
+4. Where the information pertains to a technical issue and its dissemination is necessary to illustrate or resolve it,
+5. Where the user has been behaving in a disruptive way, data may be released to a service provider, carrier, or other third-party entity to assist in the targeting of IP blocks, or to assist in the formulation of a complaint to relevant Internet Service Providers,
+6. Where it is reasonably necessary to protect the rights, property or safety of myself, Synthesia, its users or the public.
+
+
+Disclaimer
+
+I believe that maintaining and preserving the privacy of user data is an important value. This Privacy Policy represents a committed effort to safeguard the security of the limited user information that is collected and retained on the Synthesia server. Nevertheless, I cannot guarantee that user information will remain private. I acknowledge that, in spite of my committed effort to protect private user information, determined individuals may still develop data-mining and other methods to uncover such information and disclose it. For this reason, I can make no guarantee against unauthorized access to information provided in the course of using the Synthesia website or the online features built into the Synthesia application itself.
+
